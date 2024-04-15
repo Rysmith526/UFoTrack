@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -25,6 +26,9 @@ class SightingsDatabase
             Date();
             Date(int year, int month, int day);
             string dateString();
+            int getYear();
+            int getMonth();
+            int getDay();
         };
 
         class SightingDate : public Date
@@ -34,14 +38,17 @@ class SightingsDatabase
             int minute;
 
         public:
-            SightingDate();
+            using Date::Date; //Allows default constructor to be inherited https://stackoverflow.com/questions/347358/inheriting-constructors
             SightingDate(int year, int month, int day, int hour, int minutes);
             string getDate();
+            int getHour();
+            int getMinute();
         };
 
         class DocumentedDate : public Date
         {
         public:
+            using Date::Date; //Allows Constructors to be inherited https://stackoverflow.com/questions/347358/inheriting-constructors
             string getDate();
         };
 
@@ -54,10 +61,15 @@ class SightingsDatabase
         pair<float, float> coordinates; //latitude, longitude
         SightingDate sightDate;
         DocumentedDate docDate;
+        int difference; //for use in sorting, will be used for both date sorting and location sorting
 
 
 	public:
-    
+    Sighting();
+    Sighting(vector<string> strParams, pair<float, float> coordinates, vector<int> intParams);
+    void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
+    void setDifferenceByLocation(pair<float, float> inputCoordinates);
+    int getDifference();
 
  
 	};
@@ -67,8 +79,11 @@ class SightingsDatabase
 
 
 public:
-
     SightingsDatabase(string filename);
+    void mergeSortByDate(int year, int month, int day, int hour, int minutes);
+    void mergeSortByLocation(pair<float, float> inputCoordinates);
+    void quickSortByDate(int year, int month, int day, int hour, int minutes);
+    void quickSortByLocation(pair<float, float> inputCoordinates);
 };
 
 #endif
