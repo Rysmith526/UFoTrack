@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -69,13 +70,15 @@ class SightingsDatabase
     Sighting(vector<string> strParams, pair<float, float> coordinates, vector<int> intParams);
     void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
     void setDifferenceByLocation(pair<float, float> inputCoordinates);
+    void setDifference(int difference);
     int getDifference();
 
  
 	};
 
 	vector<Sighting> sightings;
-
+    void mergeSort(int left, int right);
+    void merge(int left, int mid, int right);
 
 
 public:

@@ -124,32 +124,98 @@ void SightingsDatabase::Sighting::setDifferenceByLocation(pair<float, float> inp
     difference = sqrt(pow(xdiff, 2) + pow(ydiff, 2));
 }
 
+void SightingsDatabase::Sighting::setDifference(int difference)
+{
+    this->difference = difference;
+}
+
 int SightingsDatabase::Sighting::getDifference()
 {
     return difference;
 }
 
-//Needs to be implemented
+//Sorting Lecture was referenced
+void SightingsDatabase::mergeSort(int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        mergeSort(left, mid);
+        mergeSort(mid + 1, right);
+        merge(left, mid, right);
+    }
+}
+
+//Sorting Lecture was referenced
+void SightingsDatabase::merge(int left, int mid, int right)
+{
+    queue<Sighting> leftQueue;
+    queue<Sighting> rightQueue;
+    for (int i = left; i < mid + 1; i++)
+        leftQueue.push(sightings[i]);
+    for (int j = mid + 1; j < right + 1; j++)
+        rightQueue.push(sightings[j]);
+    
+    int k = left;
+    while(leftQueue.size() > 0 && rightQueue.size() > 0)
+    {
+        if (leftQueue.front().getDifference() <= rightQueue.front().getDifference())
+        {
+            sightings[k] = leftQueue.front();
+            leftQueue.pop();
+        }
+        else
+        {
+            sightings[k] = rightQueue.front();
+            rightQueue.pop();
+        }
+        k++;
+    }
+    while (leftQueue.size() > 0)
+    {
+        sightings[k] = leftQueue.front();
+        leftQueue.pop();
+        k++;
+    }
+    while (rightQueue.size() > 0)
+    {
+        sightings[k] = rightQueue.front();
+        rightQueue.pop();
+        k++;
+    }
+
+}
+
+// Needs to be implemented
 SightingsDatabase::SightingsDatabase(string filename)
 {
 }
+
 
 void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
     for (Sighting sighting : sightings)
         sighting.setDifferenceByDate(year, month, day, hour, minutes);
+    mergeSort(0, sightings.size() - 1);
 }
 
 void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
     for (Sighting sighting : sightings)
         sighting.setDifferenceByLocation(inputCoordinates);
+    mergeSort(0, sightings.size() - 1);
 }
 
+//Needs to be implemented
 void SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
 {
+    for (Sighting sighting : sightings)
+        sighting.setDifferenceByDate(year, month, day, hour, minutes);
 }
 
+//Needs to be implemented
 void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 {
+    for (Sighting sighting : sightings)
+        sighting.setDifferenceByLocation(inputCoordinates);
 }
