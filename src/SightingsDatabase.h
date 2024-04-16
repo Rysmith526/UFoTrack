@@ -44,6 +44,7 @@ class SightingsDatabase
             string getDate();
             int getHour();
             int getMinute();
+            int minutesSince1901();
         };
 
         class DocumentedDate : public Date

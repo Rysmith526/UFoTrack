@@ -78,6 +78,68 @@ int SightingsDatabase::Sighting::SightingDate::getMinute()
     return minute;
 }
 
+//Returns minutes since 12:00 AM, 1/1/1901 (check logic)
+int SightingsDatabase::Sighting::SightingDate::minutesSince1901()
+{
+    int totalMinutes = 0;
+    int yearsSince1901 = year - 1901;
+    totalMinutes += (1461 * 24 * 60) * (yearsSince1901 / 4);
+    totalMinutes += (365 * 24 * 60) * (yearsSince1901 % 4);
+    if (month == 2)
+    {
+        totalMinutes += 31 * 24 * 60;
+    }
+    else
+    {
+        //To account for leap year
+        if (yearsSince1901 % 4 == 3)
+            totalMinutes += 24 * 60;
+        if (month == 3)
+        {
+            totalMinutes += 59 * 24 * 60;
+        }
+        else if (month == 4)
+        {
+            totalMinutes += 90 * 24 * 60;
+        }
+        else if (month == 5)
+        {
+            totalMinutes += 120 * 24 * 60;
+        }
+        else if (month == 6)
+        {
+            totalMinutes += 151 * 24 * 60;
+        }
+        else if (month == 7)
+        {
+            totalMinutes += 181 * 24 * 60;
+        }
+        else if (month == 8)
+        {
+            totalMinutes += 212 * 24 * 60;
+        }
+        else if (month == 9)
+        {
+            totalMinutes += 243 * 24 * 60;
+        }
+        else if (month == 10)
+        {
+            totalMinutes += 273 * 24 * 60;
+        }
+        else if (month == 11)
+        {
+            totalMinutes += 304 * 24 * 60;
+        }
+        else if (month == 12)
+        {
+            totalMinutes += 334 * 24 * 60;
+        }
+    }
+    totalMinutes += (day - 1) * 24 * 60;
+    totalMinutes += hour * 60 + minute;
+    return totalMinutes;
+}
+
 string SightingsDatabase::Sighting::DocumentedDate::getDate()
 {
     return dateString();
@@ -107,15 +169,9 @@ SightingsDatabase::Sighting::Sighting(vector<string> strParams, pair<float, floa
 //May need a larger data type than int 
 void SightingsDatabase::Sighting::setDifferenceByDate(int year, int month, int day, int hour, int minutes)
 {
-    int totalMinutes;
-    totalMinutes += abs(minutes - sightDate.getMinute());
-    totalMinutes += 60 * abs(hour - sightDate.getHour());
-    totalMinutes += 24 * 60 * abs(day - sightDate.getHour());
-    totalMinutes += 30 * 24 * 60 * abs(month - sightDate.getMonth());
-    totalMinutes += 365 * 30 * 24 * 60 * abs(year - sightDate.getYear());
-    difference = totalMinutes;
+    SightingDate inputDate = SightingDate(year, month, day, hour, minutes);
+    difference = abs(sightDate.minutesSince1901() - inputDate.minutesSince1901());
 }
-
 
 void SightingsDatabase::Sighting::setDifferenceByLocation(pair<float, float> inputCoordinates)
 {
