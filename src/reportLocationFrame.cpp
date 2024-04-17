@@ -1,0 +1,171 @@
+#include "reportLocationFrame.h"
+#include "MainFrame.h"
+#include <wx/wx.h>
+#include "Button.h"
+#include "Textbox.h"
+
+
+reportLocationFrame::reportLocationFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
+   
+    wxJPEGHandler *handler = new wxJPEGHandler; 
+    wxImage::AddHandler(handler);
+    wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
+    
+    //wxBitmap* image = new wxBitmap(imagePanel, wxID_ANY, wxBitmap("Best-ufo-wallpaper.jpg", wxBITMAP_TYPE_JPEG), wxDefaultPosition, wxSize(800, 600));
+    //Where When Shape titles
+    wxFont titleFont(wxFontInfo(wxSize(0,20)));
+    wxStaticText* title1 = new wxStaticText(mainPanel, wxID_ANY, "Where?", wxPoint(80, 50), wxSize(50, 20));
+    wxStaticText* title2 = new wxStaticText(mainPanel, wxID_ANY, "When?", wxPoint(80, 250), wxSize(50, 20));
+    wxStaticText* title3 = new wxStaticText(mainPanel, wxID_ANY, "Shape?", wxPoint(80, 440), wxSize(50, 20));
+    //wxStaticText* title4 = new wxStaticText(mainPanel, wxID_ANY, "Results", wxPoint(40, 130), wxSize(50, 20));
+    title1->SetFont(titleFont);
+    title2->SetFont(titleFont);
+    title3->SetFont(titleFont);
+    //Latitude Textbox
+    wxStaticText* latTitle = new wxStaticText(mainPanel, wxID_ANY, "Latitude", wxPoint(70, 80), wxSize(50, 20));
+    TextBox* latTextbox = new TextBox(mainPanel, wxID_ANY, "", wxPoint(40, 100), wxSize(100, 30));
+
+    //Longitude TextBox
+    wxStaticText* longTitle = new wxStaticText(mainPanel, wxID_ANY, "Longitude", wxPoint(220, 80), wxSize(70, 20));
+    TextBox* longTextbox = new TextBox(mainPanel, wxID_ANY, "", wxPoint(200, 100), wxSize(100, 30));
+    //City Textbox
+    wxStaticText* cityTitle = new wxStaticText(mainPanel, wxID_ANY, "City", wxPoint(70, 140), wxSize(50, 20));
+    TextBox* cityTextbox = new TextBox(mainPanel, wxID_ANY, "", wxPoint(40, 160), wxSize(100, 30));
+
+    //State Choicebox
+    wxStaticText* stateTitle = new wxStaticText(mainPanel, wxID_ANY, "State", wxPoint(220, 140), wxSize(70, 20));
+    wxArrayString stateChoices;
+    stateChoices.Add("AL");
+    stateChoices.Add("AK");
+    stateChoices.Add("AZ");
+    stateChoices.Add("AR");
+    stateChoices.Add("CA");
+    stateChoices.Add("CO");
+    stateChoices.Add("CT");
+    stateChoices.Add("DE");
+    stateChoices.Add("FL");
+    stateChoices.Add("GA");
+    stateChoices.Add("HI");
+    stateChoices.Add("ID");
+    stateChoices.Add("IL");
+    stateChoices.Add("IN");
+    stateChoices.Add("IA");
+    stateChoices.Add("KS");
+    stateChoices.Add("KY");
+    stateChoices.Add("LA");
+    stateChoices.Add("ME");
+    stateChoices.Add("MD");
+    stateChoices.Add("MA");
+    stateChoices.Add("MI");
+    stateChoices.Add("MN");
+    stateChoices.Add("MS");
+    stateChoices.Add("MO");
+    stateChoices.Add("MT");
+    stateChoices.Add("NE");
+    stateChoices.Add("NV");
+    stateChoices.Add("NH");
+    stateChoices.Add("NJ");
+    stateChoices.Add("NM");
+    stateChoices.Add("NY");
+    stateChoices.Add("NC");
+    stateChoices.Add("ND");
+    stateChoices.Add("OH");
+    stateChoices.Add("OK");
+    stateChoices.Add("OR");
+    stateChoices.Add("PA");
+    stateChoices.Add("RI");
+    stateChoices.Add("SC");
+    stateChoices.Add("SD");
+    stateChoices.Add("TN");
+    stateChoices.Add("TX");
+    stateChoices.Add("UT");
+    stateChoices.Add("VT");
+    stateChoices.Add("VA");
+    stateChoices.Add("WA");
+    stateChoices.Add("WV");
+    stateChoices.Add("WI");
+    stateChoices.Add("WY");
+
+    wxChoice* stateChoice= new wxChoice(mainPanel, wxID_ANY, wxPoint(200, 160), wxSize(100, 30), stateChoices);
+    
+
+    //Year TextBox
+    wxStaticText* year_title = new wxStaticText(mainPanel, wxID_ANY, "Year?", wxPoint(85, 230+50), wxSize(40, 18));
+    TextBox* textbox1 = new TextBox(mainPanel, wxID_ANY, "yyyy", wxPoint(80, 250+50), wxSize(40, 25));
+    //Month TextBox
+    wxStaticText* month_title = new wxStaticText(mainPanel, wxID_ANY, "Month?", wxPoint(140, 230+50), wxSize(50, 18));
+    wxArrayString monthChoices;
+    monthChoices.Add("01");
+    monthChoices.Add("02");
+    monthChoices.Add("03");
+    monthChoices.Add("04");
+    monthChoices.Add("05");
+    monthChoices.Add("06");
+    monthChoices.Add("07");
+    monthChoices.Add("08");
+    monthChoices.Add("09");
+    monthChoices.Add("10");
+    monthChoices.Add("11");
+    monthChoices.Add("12");
+    wxChoice* month_choice = new wxChoice(mainPanel, wxID_ANY, wxPoint(140, 250+50), wxSize(40, 25), monthChoices);
+    //Day TextBox
+    wxStaticText* day_title = new wxStaticText(mainPanel, wxID_ANY, "Day?", wxPoint(200, 230+50), wxSize(50, 18));
+    TextBox* textbox3 = new TextBox(mainPanel, wxID_ANY, "dd", wxPoint(195, 250+50), wxSize(40, 25));
+    //Hour Textbox
+    wxStaticText* hour_title = new wxStaticText(mainPanel, wxID_ANY, "Hour?", wxPoint(105, 290+50), wxSize(50, 18));
+    TextBox* textbox4 = new TextBox(mainPanel, wxID_ANY, "hh", wxPoint(100, 305+50), wxSize(40, 25));
+    //Minute Textbox
+    wxStaticText* minute_title = new wxStaticText(mainPanel, wxID_ANY, "Minute?", wxPoint(162, 290+50), wxSize(50, 18));
+    TextBox* textbox5 = new TextBox(mainPanel, wxID_ANY, "mm", wxPoint(160, 305+50), wxSize(40, 25));
+    //Shape Choicebox
+    wxArrayString shapeChoices;
+    shapeChoices.Add("Changing");
+    shapeChoices.Add("Chevron");
+    shapeChoices.Add("Cigar");
+    shapeChoices.Add("Circle");
+    shapeChoices.Add("Cone");
+    shapeChoices.Add("Cross");
+    shapeChoices.Add("Cube");
+    shapeChoices.Add("Cylinder");
+    shapeChoices.Add("Diamond");
+    shapeChoices.Add("Disk");
+    shapeChoices.Add("Egg");
+    shapeChoices.Add("Fireball");
+    shapeChoices.Add("Flash");
+    shapeChoices.Add("Formation");
+    shapeChoices.Add("Light");
+    shapeChoices.Add("Orb");
+    shapeChoices.Add("Other");
+    shapeChoices.Add("Oval");
+    shapeChoices.Add("Rectangle");
+    shapeChoices.Add("Sphere");
+    shapeChoices.Add("Star");
+    shapeChoices.Add("Teardrop");
+    shapeChoices.Add("Triangle");
+    shapeChoices.Add("Unknown");
+    wxChoice* shapeChoice = new wxChoice(mainPanel, wxID_ANY, wxPoint(75, 470), wxSize(70, 25), shapeChoices);
+    //Back Button
+    Button* backButton = new Button(mainPanel, wxID_ANY, "Back", wxPoint(650, 50), wxSize(100, 70));
+    //Search Button
+    Button* submitButton = new Button(mainPanel, wxID_ANY, "Submit", wxPoint(400, 80), wxSize(100, 30));
+    //Results Box
+    //wxListBox* resultsBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(40, 150), wxSize(650, 350));
+
+
+    
+    backButton->Bind(wxEVT_BUTTON, &reportLocationFrame::OnButtonClicked, this);
+    wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
+}
+
+void reportLocationFrame::OnButtonClicked(wxCommandEvent& evt) {
+    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600));
+    window1->Show(true);
+    window1->Center();
+    Close();
+}
+
+
+
+
+
