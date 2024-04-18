@@ -1,8 +1,10 @@
 #include "SightingsDatabase.h"
 
-//Needs to be completed
 SightingsDatabase::Sighting::Date::Date()
 {
+    this->year = 1901;
+    this->month = 1;
+    this->day = 1;
 }
 
 SightingsDatabase::Sighting::Date::Date(int year, int month, int day)
@@ -145,15 +147,22 @@ string SightingsDatabase::Sighting::DocumentedDate::getDate()
     return dateString();
 }
 
-//Needs to be implemented
 SightingsDatabase::Sighting::Sighting()
 {
+    this->locationCity = "Gainesville";
+    this->locationState = "FL";
+    this->locationCountry = "USA";
+    this->shape = "disc";
+    this->duration = 5;
+    this->description = "aliens!";
+    this->coordinates = make_pair(29.6513889, -82.325);
+    this->sightDate = SightingDate(1901, 1, 1, 0, 0);
+    this->docDate = DocumentedDate(1901, 1, 1);
 }
 
 //Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
-SightingsDatabase::Sighting::Sighting(vector<string> strParams, pair<float, float> coordinates, vector<int> intParams)
+SightingsDatabase::Sighting::Sighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams)
 {
-
     this->locationCity = strParams[0];
     this->locationState = strParams[1];
     this->locationCountry = strParams[2];
@@ -165,7 +174,6 @@ SightingsDatabase::Sighting::Sighting(vector<string> strParams, pair<float, floa
     this->docDate = DocumentedDate(intParams[6], intParams[7], intParams[8]);
 }
 
-//Check logic and math, differences in months not accounted for (may not matter). Look into standard library date representations or other alternatives
 //May need a larger data type than int 
 void SightingsDatabase::Sighting::setDifferenceByDate(int year, int month, int day, int hour, int minutes)
 {
@@ -279,11 +287,16 @@ SightingsDatabase::SightingsDatabase(string filename)
         intParams.push_back(stoi(row[13]));
         intParams.push_back(stoi(row[14]));
         intParams.push_back(stoi(row[15]));
-        Sighting newSighting = Sighting(strParams, make_pair(stof(row[6]), stof(row[7])), intParams);
-        sightings.push_back(newSighting);
+        sightings.push_back(Sighting(strParams, make_pair(stof(row[6]), stof(row[7])), intParams));
     }
 }
 
+//Maybe add writing to csv file
+//Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
+void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams)
+{
+    sightings.push_back(Sighting(strParams, coordinates, intParams));
+}
 
 void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {

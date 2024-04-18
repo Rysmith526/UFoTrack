@@ -70,7 +70,7 @@ class SightingsDatabase
 
 	public:
     Sighting();
-    Sighting(vector<string> strParams, pair<float, float> coordinates, vector<int> intParams);
+    Sighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
     void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
     void setDifferenceByLocation(pair<float, float> inputCoordinates);
     void setDifference(int difference);
@@ -86,6 +86,7 @@ class SightingsDatabase
 
 public:
     SightingsDatabase(string filename);
+    void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
     void mergeSortByDate(int year, int month, int day, int hour, int minutes);
     void mergeSortByLocation(pair<float, float> inputCoordinates);
     void quickSortByDate(int year, int month, int day, int hour, int minutes);
