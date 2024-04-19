@@ -42,6 +42,7 @@ class SightingsDatabase
 
         public:
             using Date::Date; //Allows default constructor to be inherited https://stackoverflow.com/questions/347358/inheriting-constructors
+            SightingDate();
             SightingDate(int year, int month, int day, int hour, int minutes);
             string getDate();
             int getHour();
@@ -53,6 +54,7 @@ class SightingsDatabase
         {
         public:
             using Date::Date; //Allows Constructors to be inherited https://stackoverflow.com/questions/347358/inheriting-constructors
+            DocumentedDate();
             string getDate();
         };
 
@@ -66,7 +68,7 @@ class SightingsDatabase
     SightingDate sightDate;
     DocumentedDate docDate;
     int difference; //for use in sorting, will be used for both date sorting and location sorting
-   
+
 
 	public:
     Sighting();
@@ -75,22 +77,33 @@ class SightingsDatabase
     void setDifferenceByLocation(pair<float, float> inputCoordinates);
     void setDifference(int difference);
     int getDifference();
+    std::string getLocationCity();
+    std::string getLocationState();
+    std::string getLocationCountry();
+    std::string getShape();
+    int getDuration();
+    std::string getDescription();
+    std::pair<float, float> getCoordinates();
+    string getSightDate();
+    string getDocDate();
 
  
 	};
 
-    vector<Sighting> sightings;
+	vector<Sighting> sightings;
     void mergeSort(int left, int right);
     void merge(int left, int mid, int right);
 
 
 public:
+    SightingsDatabase();
     SightingsDatabase(string filename);
     void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
     void mergeSortByDate(int year, int month, int day, int hour, int minutes);
     void mergeSortByLocation(pair<float, float> inputCoordinates);
     void quickSortByDate(int year, int month, int day, int hour, int minutes);
     void quickSortByLocation(pair<float, float> inputCoordinates);
+    vector<std::string> returnSightings();
 };
 
 #endif
