@@ -46,13 +46,21 @@ int SightingsDatabase::Sighting::Date::getDay()
     return day;
 }
 
+SightingsDatabase::Sighting::SightingDate::SightingDate() {
+    this->year = 1901;
+    this->month = 1;
+    this->day = 1;
+    this->hour = 0;
+    this->minute = 0;
+}
+
 SightingsDatabase::Sighting::SightingDate::SightingDate(int year, int month, int day, int hour, int minutes)
 {
     this->year = year;
     this->month = month;
     this->day = day;
     this->hour = hour;
-    this->minute = minute;
+    this->minute = minutes;
 }
 
 //Returns HH:MM, MM/DD/YYYY
@@ -142,6 +150,10 @@ int SightingsDatabase::Sighting::SightingDate::minutesSince1901()
     return totalMinutes;
 }
 
+SightingsDatabase::Sighting::DocumentedDate::DocumentedDate() {
+
+}
+
 string SightingsDatabase::Sighting::DocumentedDate::getDate()
 {
     return dateString();
@@ -200,6 +212,16 @@ float SightingsDatabase::Sighting::getDifference()
     return difference;
 }
 
+std::string SightingsDatabase::Sighting::getLocationCity()  { return locationCity; }
+std::string SightingsDatabase::Sighting::getLocationState()  { return locationState; }
+std::string SightingsDatabase::Sighting::getLocationCountry()  { return locationCountry; }
+std::string SightingsDatabase::Sighting::getShape()  { return shape; }
+int SightingsDatabase::Sighting::getDuration()  { return duration; }
+std::string SightingsDatabase::Sighting::getDescription()  { return description; }
+std::pair<float, float> SightingsDatabase::Sighting::getCoordinates()  { return coordinates; }
+string SightingsDatabase::Sighting::getSightDate()  { return sightDate.getDate(); }
+string SightingsDatabase::Sighting::getDocDate()  { return docDate.getDate(); }
+
 //Sorting Lecture was referenced
 void SightingsDatabase::mergeSort(int left, int right)
 {
@@ -254,6 +276,18 @@ void SightingsDatabase::merge(int left, int mid, int right)
 
 // https://www.geeksforgeeks.org/csv-file-management-using-c/ was referenced
 // May need to add input verification from file
+SightingsDatabase::SightingsDatabase() {
+    vector<Sighting> sightingg;
+    this->sightings = sightingg;
+    //void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
+    //Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
+    vector<std::string> strParams = {"Gainesville", "FL", "USA", "disc", "aliens!"};
+    vector<int> intParams = {1, 1901, 1, 1, 0, 0, 1901, 1, 1};
+    pair<float, float> coords = make_pair(29.6513889, -82.325);
+    
+    insertSighting(strParams, coords, intParams);
+}
+
 SightingsDatabase::SightingsDatabase(string filename)
 {
     fstream fin;
@@ -334,3 +368,29 @@ void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
     for (Sighting sighting : sightings)
         sighting.setDifferenceByLocation(inputCoordinates);
 }
+
+vector<std::string> SightingsDatabase::returnSightings() {
+    vector<std::string> vectorOfSightings;
+    for (Sighting sighting : sightings) {
+        std::string info;
+
+        info += "City: " + sighting.getLocationCity() + ", ";
+        info += "State: " + sighting.getLocationState() + ", ";
+        info += "Country: " + sighting.getLocationCountry() + ", ";
+        info += "Shape: " + sighting.getShape() + ", ";
+        info += "Duration: " + std::to_string(sighting.getDuration()) + ", ";
+        info += "Description: " + sighting.getDescription() + ", ";
+
+        info += "Coordinates: (" + std::to_string(sighting.getCoordinates().first) + ", " + std::to_string(sighting.getCoordinates().second) + "), ";
+
+        info += "Sighting Date: " + sighting.getSightDate() + ", ";
+        info += "Documented Date: " + sighting.getDocDate() + ", ";
+
+        info.pop_back();
+        info.pop_back();
+        vectorOfSightings.push_back(info);
+    }
+    return vectorOfSightings;
+    
+}
+
