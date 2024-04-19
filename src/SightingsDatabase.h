@@ -58,6 +58,10 @@ class SightingsDatabase
             string getDate();
         };
 
+
+   
+
+	public:
     string locationCity;
     string locationState;
     string locationCountry;
@@ -67,16 +71,13 @@ class SightingsDatabase
     pair<float, float> coordinates; //latitude, longitude
     SightingDate sightDate;
     DocumentedDate docDate;
-    int difference; //for use in sorting, will be used for both date sorting and location sorting
-
-
-	public:
+    float difference; //for use in sorting, will be used for both date sorting and location sorting
     Sighting();
     Sighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
     void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
     void setDifferenceByLocation(pair<float, float> inputCoordinates);
-    void setDifference(int difference);
-    int getDifference();
+    void setDifference(float difference);
+    float getDifference();
     std::string getLocationCity();
     std::string getLocationState();
     std::string getLocationCountry();
@@ -88,14 +89,15 @@ class SightingsDatabase
     string getDocDate();
 
  
-	};
-
-	vector<Sighting> sightings;
+	}; 
+    void setDifference(float difference);
+    float getDifference();
     void mergeSort(int left, int right);
     void merge(int left, int mid, int right);
 
 
 public:
+    vector<Sighting> sightings;
     SightingsDatabase();
     SightingsDatabase(string filename);
     void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);

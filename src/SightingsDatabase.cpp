@@ -197,15 +197,17 @@ void SightingsDatabase::Sighting::setDifferenceByLocation(pair<float, float> inp
 {
     float xdiff = coordinates.first - inputCoordinates.first;
     float ydiff = coordinates.second - inputCoordinates.second;
-    difference = sqrt(pow(xdiff, 2) + pow(ydiff, 2));
+    setDifference((sqrt(pow(xdiff, 2) + pow(ydiff, 2))));
+    if (locationCity == "anchor point")
+        cout << difference << endl;
 }
 
-void SightingsDatabase::Sighting::setDifference(int difference)
+void SightingsDatabase::Sighting::setDifference(float difference)
 {
     this->difference = difference;
 }
 
-int SightingsDatabase::Sighting::getDifference()
+float SightingsDatabase::Sighting::getDifference()
 {
     return difference;
 }
@@ -304,7 +306,6 @@ SightingsDatabase::SightingsDatabase(string filename)
         strParams.clear();
         intParams.clear();
         stringstream s(line);
-        cout << line << endl;
         while (getline(s, word, ','))
         {
             row.push_back(word);
