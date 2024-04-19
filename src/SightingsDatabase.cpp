@@ -262,32 +262,40 @@ SightingsDatabase::SightingsDatabase(string filename)
     vector<string> strParams;
     vector<int> intParams;
 
-    while (fin >> temp)
+    bool firstLine = true;
+
+    while (getline(fin, line))
     {
         row.clear();
         strParams.clear();
         intParams.clear();
-        getline(fin, line);
         stringstream s(line);
-
+        cout << line << endl;
         while (getline(s, word, ','))
+        {
             row.push_back(word);
+        }
 
-        strParams.push_back(row[0]);
-        strParams.push_back(row[1]);
-        strParams.push_back(row[2]);
-        strParams.push_back(row[3]);
-        intParams.push_back(stoi(row[4]));
-        strParams.push_back(row[5]);
-        intParams.push_back(stoi(row[8]));
-        intParams.push_back(stoi(row[9]));
-        intParams.push_back(stoi(row[10]));
-        intParams.push_back(stoi(row[11]));
-        intParams.push_back(stoi(row[12]));
-        intParams.push_back(stoi(row[13]));
-        intParams.push_back(stoi(row[14]));
-        intParams.push_back(stoi(row[15]));
-        sightings.push_back(Sighting(strParams, make_pair(stof(row[6]), stof(row[7])), intParams));
+        if (!firstLine)
+        {
+            strParams.push_back(row[0]);
+            strParams.push_back(row[1]);
+            strParams.push_back(row[2]);
+            strParams.push_back(row[3]);
+            intParams.push_back(stoi(row[4]));
+            strParams.push_back(row[5]);
+            intParams.push_back(stoi(row[8]));
+            intParams.push_back(stoi(row[9]));
+            intParams.push_back(stoi(row[10]));
+            intParams.push_back(stoi(row[11]));
+            intParams.push_back(stoi(row[12]));
+            intParams.push_back(stoi(row[13]));
+            intParams.push_back(stoi(row[14]));
+            intParams.push_back(stoi(row[15]));
+            sightings.push_back(Sighting(strParams, make_pair(stof(row[6]), stof(row[7])), intParams));
+        }
+        else
+            firstLine = false;
     }
 }
 

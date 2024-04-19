@@ -56,17 +56,17 @@ class SightingsDatabase
             string getDate();
         };
 
-        string locationCity;
-        string locationState;
-        string locationCountry;
-        string shape;
-        int duration;
-        string description;
-        pair<float, float> coordinates; //latitude, longitude
-        SightingDate sightDate;
-        DocumentedDate docDate;
-        int difference; //for use in sorting, will be used for both date sorting and location sorting
-
+    string locationCity;
+    string locationState;
+    string locationCountry;
+    string shape;
+    int duration;
+    string description;
+    pair<float, float> coordinates; //latitude, longitude
+    SightingDate sightDate;
+    DocumentedDate docDate;
+    int difference; //for use in sorting, will be used for both date sorting and location sorting
+   
 
 	public:
     Sighting();
@@ -79,7 +79,7 @@ class SightingsDatabase
  
 	};
 
-	vector<Sighting> sightings;
+    vector<Sighting> sightings;
     void mergeSort(int left, int right);
     void merge(int left, int mid, int right);
 
