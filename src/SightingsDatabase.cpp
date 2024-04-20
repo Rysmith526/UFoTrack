@@ -343,15 +343,15 @@ void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, fl
 
 void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByDate(year, month, day, hour, minutes);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
     mergeSort(0, sightings.size() - 1);
 }
 
 void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByLocation(inputCoordinates);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByLocation(inputCoordinates);
     mergeSort(0, sightings.size() - 1);
 }
 
