@@ -1,4 +1,5 @@
 #include "SightingsDatabase.h"
+#include <cmath>
 
 SightingsDatabase::Sighting::Date::Date()
 {
@@ -343,15 +344,15 @@ void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, fl
 
 void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByDate(year, month, day, hour, minutes);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
     mergeSort(0, sightings.size() - 1);
 }
 
 void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByLocation(inputCoordinates);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByLocation(inputCoordinates);
     mergeSort(0, sightings.size() - 1);
 }
 
@@ -370,8 +371,10 @@ void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 }
 
 vector<std::string> SightingsDatabase::returnSightings() {
+    int count = 0;
     vector<std::string> vectorOfSightings;
     for (Sighting sighting : sightings) {
+        if (count == 500) {break;}
         std::string info;
 
         info += "City: " + sighting.getLocationCity() + ", ";
@@ -389,8 +392,8 @@ vector<std::string> SightingsDatabase::returnSightings() {
         info.pop_back();
         info.pop_back();
         vectorOfSightings.push_back(info);
+        count += 1;
     }
     return vectorOfSightings;
     
 }
-

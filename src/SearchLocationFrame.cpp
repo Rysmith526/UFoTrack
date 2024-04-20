@@ -3,9 +3,11 @@
 #include <wx/wx.h>
 #include "Button.h"
 #include "Textbox.h"
+#include "SightingsDatabase.h"
 
 
-searchLocationFrame::searchLocationFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+searchLocationFrame::searchLocationFrame(const wxString& title, const wxPoint& pos, const wxSize& size, SightingsDatabase sightings): wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
     wxJPEGHandler *handler = new wxJPEGHandler; 
@@ -27,15 +29,15 @@ searchLocationFrame::searchLocationFrame(const wxString& title, const wxPoint& p
     title5->SetFont(titleFont);
     //title3->SetFont(titleFont);
     //Latitude TextBox
-    TextBox* textbox1 = new TextBox(mainPanel, wxID_ANY, "", wxPoint(40, 80), wxSize(200, 30));
+    latitudeBox = new TextBox(mainPanel, wxID_ANY, "", wxPoint(40, 80), wxSize(200, 30), wxTE_LEFT, wxTextValidator(wxFILTER_NUMERIC));
     //Longitude TextBox
-    TextBox* textbox3 = new TextBox(mainPanel, wxID_ANY, "", wxPoint(300, 80), wxSize(200, 30));
+    longitudeBox = new TextBox(mainPanel, wxID_ANY, "", wxPoint(300, 80), wxSize(200, 30), wxTE_LEFT, wxTextValidator(wxFILTER_NUMERIC));
     //Back Button
     Button* backButton = new Button(mainPanel, wxID_ANY, "Back", wxPoint(675, 50), wxSize(100, 70));
     //Search Button
-    Button* submitButton = new Button(mainPanel, wxID_ANY, "Search", wxPoint(520, 80), wxSize(100, 30));
+    submitButton = new Button(mainPanel, wxID_ANY, "Search", wxPoint(520, 80), wxSize(100, 30));
     //Results Box
-    wxListBox* resultsBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(40, 150), wxSize(650, 350));
+    resultsBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(40, 150), wxSize(650, 350), results, wxLB_HSCROLL);
     //Sort choiceBox
     wxArrayString sortChoices;
     sortChoices.Add("Quick Sort");
@@ -44,19 +46,34 @@ searchLocationFrame::searchLocationFrame(const wxString& title, const wxPoint& p
     //Time of sorting
     wxListBox* timeBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(700, 245), wxSize(70, 25));
     
+    submitButton->Bind(wxEVT_BUTTON, &searchLocationFrame::submitButtonClicked, this);
     backButton->Bind(wxEVT_BUTTON, &searchLocationFrame::OnButtonClicked, this);
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 }
 
 void searchLocationFrame::OnButtonClicked(wxCommandEvent& evt) {
-    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600));
+    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600), sightings);
     window1->Show(true);
     window1->Center();
     Close();
 }
 
 void searchLocationFrame::submitButtonClicked(wxCommandEvent& evt) {
+    searchSort();
+}
 
+void searchLocationFrame::searchSort() {
+    resultsBox->Clear();
+    double latitude;
+    wxString number(latitudeBox->GetValue());
+    number.ToDouble(&latitude);
+    double longitude;
+    wxString number1(longitudeBox->GetValue());
+    number1.ToDouble(&longitude);
+    sightings.mergeSortByLocation(std::make_pair((float)latitude, (float)longitude));
+    for (int i = 0; i < 500; i++) {
+        resultsBox->Append(sightings.returnSightings()[i]);
+    }
 }
 
 

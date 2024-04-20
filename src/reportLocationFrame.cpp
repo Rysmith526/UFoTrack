@@ -3,9 +3,11 @@
 #include <wx/wx.h>
 #include "Button.h"
 #include "Textbox.h"
+#include "SightingsDatabase.h"
 
 
-reportLocationFrame::reportLocationFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+reportLocationFrame::reportLocationFrame(const wxString& title, const wxPoint& pos, const wxSize& size, SightingsDatabase sightings) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
     wxJPEGHandler *handler = new wxJPEGHandler; 
@@ -159,7 +161,7 @@ reportLocationFrame::reportLocationFrame(const wxString& title, const wxPoint& p
 }
 
 void reportLocationFrame::OnButtonClicked(wxCommandEvent& evt) {
-    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600));
+    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600), this->sightings);
     window1->Show(true);
     window1->Center();
     Close();

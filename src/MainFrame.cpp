@@ -5,17 +5,18 @@
 #include <wx/wx.h>
 #include "Button.h"
 #include "Textbox.h"
+#include "SightingsDatabase.h"
 
 
-
-MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(nullptr, wxID_ANY, title, pos, size) {
+MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& size, SightingsDatabase sightings): wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
     wxJPEGHandler *handler = new wxJPEGHandler; 
     wxImage::AddHandler(handler);
-    wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
+  //  wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
     
-    //wxBitmap* image = new wxBitmap(imagePanel, wxID_ANY, wxBitmap("Best-ufo-wallpaper.jpg", wxBITMAP_TYPE_JPEG), wxDefaultPosition, wxSize(800, 600));
+    //wxStaticBitmap* image = new wxStaticBitmap(imagePanel, wxID_ANY, wxBitmap("Best-ufo-wallpaper-test.jpg", wxBITMAP_TYPE_JPEG), wxDefaultPosition, wxSize(800, 600));
     //UFoTrack Title
     wxFont titleFont(wxFontInfo(wxSize(0,36)).Bold());
     wxStaticText* title1 = new wxStaticText(mainPanel, wxID_ANY, "UFoTrack", wxPoint(100, 50), wxSize(125, 50));
@@ -44,21 +45,21 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 }
 
 void MainFrame::switchToSearchLocation(wxCommandEvent& evt) {
-    searchLocationFrame* window2 = new searchLocationFrame(wxString("Search by Location"), wxPoint(50, 50), wxSize(800, 600));
+    searchLocationFrame* window2 = new searchLocationFrame(wxString("Search by Location"), wxPoint(50, 50), wxSize(800, 600), this->sightings);
     window2->Show(true);
     window2->Center();
     Close();
 }
 
 void MainFrame::switchToSearchDate(wxCommandEvent& evt) {
-    searchDateFrame* window3 = new searchDateFrame(wxString("Search by Date"), wxPoint(50, 50), wxSize(800, 600));
+    searchDateFrame* window3 = new searchDateFrame(wxString("Search by Date"), wxPoint(50, 50), wxSize(800, 600), this->sightings);
     window3->Show(true);
     window3->Center();
     Close();
 }
 
 void MainFrame::switchToReportSighting(wxCommandEvent& evt) {
-    reportLocationFrame* window4 = new reportLocationFrame(wxString("Report Sighting"), wxPoint(50, 50), wxSize(800, 600));
+    reportLocationFrame* window4 = new reportLocationFrame(wxString("Report Sighting"), wxPoint(50, 50), wxSize(800, 600), this->sightings);
     window4->Show(true);
     window4->Center();
     Close();

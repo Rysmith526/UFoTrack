@@ -3,9 +3,11 @@
 #include <wx/wx.h>
 #include "Button.h"
 #include "Textbox.h"
+#include "SightingsDatabase.h"
 
 
-searchDateFrame::searchDateFrame(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+searchDateFrame::searchDateFrame(const wxString& title, const wxPoint& pos, const wxSize& size, SightingsDatabase sightings) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
     wxJPEGHandler *handler = new wxJPEGHandler; 
@@ -27,7 +29,7 @@ searchDateFrame::searchDateFrame(const wxString& title, const wxPoint& pos, cons
     title3->SetFont(titleFont);
     title5->SetFont(titleFont);
     //Year TextBox
-    TextBox* textbox1 = new TextBox(mainPanel, wxID_ANY, "yyyy", wxPoint(100, 80), wxSize(80, 30));
+    yearBox = new TextBox(mainPanel, wxID_ANY, "yyyy", wxPoint(100, 80), wxSize(80, 30));
     //Month TextBox
     wxArrayString monthChoices;
     monthChoices.Add("01");
@@ -42,15 +44,15 @@ searchDateFrame::searchDateFrame(const wxString& title, const wxPoint& pos, cons
     monthChoices.Add("10");
     monthChoices.Add("11");
     monthChoices.Add("12");
-    wxChoice* textbox2 = new wxChoice(mainPanel, wxID_ANY, wxPoint(200, 80), wxSize(80, 30), monthChoices);
+    monthChoice = new wxChoice(mainPanel, wxID_ANY, wxPoint(200, 80), wxSize(80, 30), monthChoices);
     //Day TextBox
-    TextBox* textbox3 = new TextBox(mainPanel, wxID_ANY, "dd", wxPoint(300, 80), wxSize(80, 30));
+    dayBox = new TextBox(mainPanel, wxID_ANY, "dd", wxPoint(300, 80), wxSize(80, 30));
     //Back Button
     Button* backButton = new Button(mainPanel, wxID_ANY, "Back", wxPoint(650, 50), wxSize(100, 70));
     //Search Button
-    Button* submitButton = new Button(mainPanel, wxID_ANY, "Search", wxPoint(400, 80), wxSize(100, 30));
-    //Results Box
-    wxListBox* resultsBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(40, 150), wxSize(650, 350));
+    submitButton = new Button(mainPanel, wxID_ANY, "Search", wxPoint(400, 80), wxSize(100, 30));
+    //Results Box    
+    resultsBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(40, 150), wxSize(650, 350), results, wxLB_HSCROLL);
 
     //Sort choiceBox
     wxArrayString sortChoices;
@@ -60,19 +62,31 @@ searchDateFrame::searchDateFrame(const wxString& title, const wxPoint& pos, cons
     //Time of sorting
     wxListBox* timeBox = new wxListBox(mainPanel, wxID_ANY, wxPoint(700, 245), wxSize(70, 25));
     
+    submitButton->Bind(wxEVT_BUTTON, &searchDateFrame::submitButtonClicked, this);
     backButton->Bind(wxEVT_BUTTON, &searchDateFrame::OnButtonClicked, this);
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 }
 
 void searchDateFrame::OnButtonClicked(wxCommandEvent& evt) {
-    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600));
+    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(50, 50), wxSize(800, 600), sightings);
     window1->Show(true);
     window1->Center();
     Close();
 }
 
 void searchDateFrame::submitButtonClicked(wxCommandEvent& evt) {
+    searchSort();
+}
 
+void searchDateFrame::searchSort() {
+    resultsBox->Clear();
+    int year = std::stoi(yearBox->GetValue().ToStdString());
+    int month = std::stoi(monthChoice->GetStringSelection().ToStdString());
+    int day = std::stoi(dayBox->GetValue().ToStdString());
+    sightings.mergeSortByDate(year, month, day, 12, 0);
+    for (int i = 0; i < 500; i++) {
+        resultsBox->Append(sightings.returnSightings()[i]);
+    }
 }
 
 
