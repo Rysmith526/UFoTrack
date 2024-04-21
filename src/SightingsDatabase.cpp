@@ -281,7 +281,7 @@ SightingsDatabase::SightingsDatabase() {
     vector<Sighting> sightingg;
     this->sightings = sightingg;
     //void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
-    //Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
+    //Str Params: City, State, Country, Shape, Description; Int Params: Duration, Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
     vector<std::string> strParams = {"Gainesville", "FL", "USA", "disc", "aliens!"};
     vector<int> intParams = {1, 1901, 1, 1, 0, 0, 1901, 1, 1};
     pair<float, float> coords = make_pair(29.6513889, -82.325);
@@ -336,7 +336,7 @@ SightingsDatabase::SightingsDatabase(string filename)
 }
 
 //Maybe add writing to csv file
-//Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
+//Str Params: City, State, Country, Shape, Description; Int Params: Duration, Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
 void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams)
 {
     sightings.push_back(Sighting(strParams, coordinates, intParams));

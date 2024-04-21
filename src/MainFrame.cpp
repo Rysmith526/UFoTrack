@@ -12,24 +12,14 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
     this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
-     wxPNGHandler *handler = new wxPNGHandler; 
-     wxImage::AddHandler(handler);
-     wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
-    // wxBitmap imageBitmap("ufgatorufo.png", wxBITMAP_TYPE_PNG);
-    // imageBitmap.SetHeight(40);
-    // imageBitmap.SetWidth(40);
-    // Load the image from file
-        wxImage image("ufgatorufo.png", wxBITMAP_TYPE_PNG);
-
-        // Scale the image to the desired size
-        image.Rescale(150, 150);
-
-        // Convert the image to a bitmap
-        wxBitmap imageBitmap(image);
-
-        // Create a wxStaticBitmap to display the resized image
-        wxStaticBitmap* imageCtrl = new wxStaticBitmap(this, wxID_ANY, imageBitmap, wxPoint(320, 270), wxDefaultSize);
-    //imagePanel->Raise();
+    wxPNGHandler *handler = new wxPNGHandler; 
+    wxImage::AddHandler(handler);
+    wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
+    wxImage image("ufgatorufo.png", wxBITMAP_TYPE_PNG);
+    image.Rescale(150, 150);
+    wxBitmap imageBitmap(image);
+    wxStaticBitmap* imageCtrl = new wxStaticBitmap(this, wxID_ANY, imageBitmap, wxPoint(320, 270), wxDefaultSize);
+    
     //UFoTrack Title
     wxFont titleFont(wxFontInfo(wxSize(0,36)).Bold());
     wxStaticText* Utitle1 = new wxStaticText(mainPanel, wxID_ANY, "U", wxPoint(99, 50), wxSize(3, 50));
