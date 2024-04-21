@@ -12,19 +12,40 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
     this->sightings = sightings;
     wxPanel* mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
    
-    wxJPEGHandler *handler = new wxJPEGHandler; 
-    wxImage::AddHandler(handler);
-  //  wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
-    
-    //wxStaticBitmap* image = new wxStaticBitmap(imagePanel, wxID_ANY, wxBitmap("Best-ufo-wallpaper-test.jpg", wxBITMAP_TYPE_JPEG), wxDefaultPosition, wxSize(800, 600));
+     wxPNGHandler *handler = new wxPNGHandler; 
+     wxImage::AddHandler(handler);
+     wxPanel* imagePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600));
+    // wxBitmap imageBitmap("ufgatorufo.png", wxBITMAP_TYPE_PNG);
+    // imageBitmap.SetHeight(40);
+    // imageBitmap.SetWidth(40);
+    // Load the image from file
+        wxImage image("ufgatorufo.png", wxBITMAP_TYPE_PNG);
+
+        // Scale the image to the desired size
+        image.Rescale(150, 150);
+
+        // Convert the image to a bitmap
+        wxBitmap imageBitmap(image);
+
+        // Create a wxStaticBitmap to display the resized image
+        wxStaticBitmap* imageCtrl = new wxStaticBitmap(this, wxID_ANY, imageBitmap, wxPoint(320, 270), wxDefaultSize);
+    //imagePanel->Raise();
     //UFoTrack Title
     wxFont titleFont(wxFontInfo(wxSize(0,36)).Bold());
-    wxStaticText* title1 = new wxStaticText(mainPanel, wxID_ANY, "UFoTrack", wxPoint(100, 50), wxSize(125, 50));
-    title1->SetFont(titleFont);
+    wxStaticText* Utitle1 = new wxStaticText(mainPanel, wxID_ANY, "U", wxPoint(99, 50), wxSize(3, 50));
+    wxStaticText* Ftitle1 = new wxStaticText(mainPanel, wxID_ANY, "F", wxPoint(125, 50), wxSize(3, 50));
+    wxStaticText* oTracktitle1 = new wxStaticText(mainPanel, wxID_ANY, "oTrack", wxPoint(145, 50), wxSize(80, 50));
+    Utitle1->SetFont(titleFont);
+    Ftitle1->SetFont(titleFont);
+    oTracktitle1->SetFont(titleFont);
+    Utitle1->SetForegroundColour(wxColour(0, 33, 165)); 
+    Ftitle1->SetForegroundColour(wxColour(250, 70, 22)); 
+    oTracktitle1->SetForegroundColour(wxColour(131, 89, 163)); 
+    wxStaticText* welcomeText = new wxStaticText(mainPanel, wxID_ANY, "Welcome to UFoTrack, your ultimate tool for exploring and reporting UFO sightings! With a database of 60,000 documented encounters from 1910-2014, UFOTrack offers a variety of features to help you delve into the mysterious world of unidentified flying objects. \n\nUse our GPS coordinate search to discover sightings nearest to a specific location, allowing you to uncover intriguing incidents that may have occurred in your area. Alternatively, explore sightings based on their date, discovering events that coincide with specific moments in time or significant historical events. \n\nAdditionally, UFOTrack provides a platform for you to contribute to our growing database by reporting your own sightings. Share your experiences with the community and contribute to our collective understanding of these enigmatic phenomena.", wxPoint(70, 100), wxSize(600, 175));
     //Search by Location Button
-    Button* button1 = new Button(mainPanel, wxID_ANY, "Search by Location", wxPoint(80, 300), wxSize(125, 50));
+    Button* button1 = new Button(mainPanel, wxID_ANY, "Search by Location", wxPoint(125, 300), wxSize(125, 50));
     //Search by Date Button
-    Button* button2 = new Button(mainPanel, wxID_ANY, "Search by Date", wxPoint(330, 300), wxSize(125, 50));
+    Button* button2 = new Button(mainPanel, wxID_ANY, "Search by Date", wxPoint(550, 300), wxSize(125, 50));
     //Report Sighting Button
     Button* button3 = new Button(mainPanel, wxID_ANY, "REPORT SIGHTING", wxPoint(250, 425), wxSize(300, 50));
 
