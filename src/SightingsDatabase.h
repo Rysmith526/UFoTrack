@@ -98,10 +98,10 @@ public:
     SightingsDatabase();
     SightingsDatabase(string filename);
     void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
-    void mergeSortByDate(int year, int month, int day, int hour, int minutes);
-    void mergeSortByLocation(pair<float, float> inputCoordinates);
-    void quickSortByDate(int year, int month, int day, int hour, int minutes);
-    void quickSortByLocation(pair<float, float> inputCoordinates);
+    float mergeSortByDate(int year, int month, int day, int hour, int minutes);
+    float mergeSortByLocation(pair<float, float> inputCoordinates);
+    float quickSortByDate(int year, int month, int day, int hour, int minutes);
+    float quickSortByLocation(pair<float, float> inputCoordinates);
     vector<std::string> returnSightings();
 };
 
