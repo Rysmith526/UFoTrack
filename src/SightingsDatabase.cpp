@@ -289,14 +289,14 @@ void SightingsDatabase::quickSort(int low, int high)
 //Sorting Lecture was referenced
 int SightingsDatabase::partition(int low, int high)
 {
-    int pivot = sightings.at(high / 2);
+    float pivot = sightings.at(low).getDifference();
     int up = low, down = high;
 
     while(up < down)
     {
         for (int j = up; j < high; j++)
         {
-            if(sightings.at(up) > pivot)
+            if(sightings.at(up).getDifference() > pivot)
             {
                 break;
             }
@@ -304,7 +304,7 @@ int SightingsDatabase::partition(int low, int high)
         }
         for (int j = high; j > low; j--)
         {
-            if(sightings.at(down) < pivot)
+            if(sightings.at(down).getDifference() < pivot)
             {
                 break;
             }
@@ -312,10 +312,10 @@ int SightingsDatabase::partition(int low, int high)
         }
         if(up < down)
         {
-            swap(&sightings[up], &sightings[down]);
+            swap(sightings.at(up), sightings.at(down));
         }
     }
-    swap(&sightings[low], &sightings[down]);
+    swap(sightings.at(low), sightings.at(down));
     return down;
 }
 
