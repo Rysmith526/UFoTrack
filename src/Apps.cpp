@@ -4,9 +4,12 @@
 #include "MainFrame.h"
 #include "Button.h"
 #include "Textbox.h"
+#include "SightingsDatabase.h"
+
 
 bool Apps::OnInit() {
-    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(300, 100), wxSize(800, 600));
+    SightingsDatabase ufoSightings = SightingsDatabase("ufo_sightings.csv");
+    MainFrame* window1 = new MainFrame(wxString("UFoTrack"), wxPoint(300, 100), wxSize(800, 600), ufoSightings);
     window1->Center();
     window1->Show(true);
     //window1->Bind(wxEVT_BUTTON, &window1->OnButtonClicked, window1);

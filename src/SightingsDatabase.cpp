@@ -1,4 +1,6 @@
 #include "SightingsDatabase.h"
+#include <chrono>
+
 
 SightingsDatabase::Sighting::Date::Date()
 {
@@ -274,6 +276,58 @@ void SightingsDatabase::merge(int left, int mid, int right)
 
 }
 
+//Sorting Lecture was referenced
+void SightingsDatabase::quickSort(int low, int high, std::chrono::high_resolution_clock::time_point start)
+{
+    if (low < high)
+    {
+        //std::cout << "infinite" << endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration<float>(end - start).count() > 1) {return;}
+        int pivot = partition(low, high, start);
+        quickSort(low, pivot - 1, start);
+        quickSort(pivot + 1, high, start);
+    }
+}
+
+void SightingsDatabase::swapSighting(Sighting* a, Sighting* b) {
+    Sighting t = *a;
+    *a = *b;
+    *b = t;
+}
+
+//Sorting Lecture was referenced
+int SightingsDatabase::partition(int low, int high, std::chrono::high_resolution_clock::time_point start)
+{
+    float pivot = sightings.at(low).getDifference();
+    int up = low, down = high;
+    while(up < down)
+    {
+        for (int j = up; j < high; j++)
+        {
+            if(sightings.at(up).getDifference() > pivot)
+            {
+                break;
+            }
+            up++;
+        }
+        for (int j = high; j > low; j--)
+        {
+            if(sightings.at(down).getDifference() < pivot)
+            {
+                break;
+            }
+            down--;
+        }
+        if(up < down)
+        {
+            swapSighting(&sightings.at(up), &sightings.at(down));
+        }
+    }
+    swapSighting(&sightings.at(low), &sightings.at(down));
+    return down;
+}
+
 // https://www.geeksforgeeks.org/csv-file-management-using-c/ was referenced
 // May need to add input verification from file
 SightingsDatabase::SightingsDatabase() {
@@ -334,44 +388,61 @@ SightingsDatabase::SightingsDatabase(string filename)
     }
 }
 
-//Maybe add writing to csv file
 //Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
 void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams)
 {
     sightings.push_back(Sighting(strParams, coordinates, intParams));
 }
 
-void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
+float SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
     mergeSort(0, sightings.size() - 1);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
+float SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByLocation(inputCoordinates);
     mergeSort(0, sightings.size() - 1);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-//Needs to be implemented
-void SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
+float SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByDate(year, month, day, hour, minutes);
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
+    quickSort(0, sightings.size() - 1, start);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-//Needs to be implemented
-void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
+float SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByLocation(inputCoordinates);
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByLocation(inputCoordinates);
+    quickSort(0, sightings.size() - 1, start);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
 vector<std::string> SightingsDatabase::returnSightings() {
+    int count = 0;
     vector<std::string> vectorOfSightings;
     for (Sighting sighting : sightings) {
+        if (count == 500) {break;}
         std::string info;
 
         info += "City: " + sighting.getLocationCity() + ", ";
@@ -389,8 +460,8 @@ vector<std::string> SightingsDatabase::returnSightings() {
         info.pop_back();
         info.pop_back();
         vectorOfSightings.push_back(info);
+        count += 1;
     }
     return vectorOfSightings;
     
 }
-

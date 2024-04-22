@@ -9,6 +9,7 @@
 #include <queue>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 using namespace std;
 
@@ -58,53 +59,52 @@ class SightingsDatabase
             string getDate();
         };
 
-
-   
-
 	public:
-    string locationCity;
-    string locationState;
-    string locationCountry;
-    string shape;
-    int duration;
-    string description;
-    pair<float, float> coordinates; //latitude, longitude
-    SightingDate sightDate;
-    DocumentedDate docDate;
-    float difference; //for use in sorting, will be used for both date sorting and location sorting
-    Sighting();
-    Sighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
-    void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
-    void setDifferenceByLocation(pair<float, float> inputCoordinates);
-    void setDifference(float difference);
-    float getDifference();
-    std::string getLocationCity();
-    std::string getLocationState();
-    std::string getLocationCountry();
-    std::string getShape();
-    int getDuration();
-    std::string getDescription();
-    std::pair<float, float> getCoordinates();
-    string getSightDate();
-    string getDocDate();
+        string locationCity;
+        string locationState;
+        string locationCountry;
+        string shape;
+        int duration;
+        string description;
+        pair<float, float> coordinates; //latitude, longitude
+        SightingDate sightDate;
+        DocumentedDate docDate;
+        float difference; //for use in sorting, will be used for both date sorting and location sorting
+        Sighting();
+        Sighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
+        void setDifferenceByDate(int year, int month, int day, int hour, int minutes);
+        void setDifferenceByLocation(pair<float, float> inputCoordinates);
+        void setDifference(float difference);
+        float getDifference();
+        std::string getLocationCity();
+        std::string getLocationState();
+        std::string getLocationCountry();
+        std::string getShape();
+        int getDuration();
+        std::string getDescription();
+        std::pair<float, float> getCoordinates();
+        string getSightDate();
+        string getDocDate();
+        int count;
+	};
 
- 
-	}; 
     void setDifference(float difference);
     float getDifference();
     void mergeSort(int left, int right);
     void merge(int left, int mid, int right);
-
+    void quickSort(int low, int high, std::chrono::high_resolution_clock::time_point start);
+    void swapSighting(Sighting* a, Sighting* b);
+    int partition(int low, int high, std::chrono::high_resolution_clock::time_point start);
 
 public:
     vector<Sighting> sightings;
     SightingsDatabase();
     SightingsDatabase(string filename);
     void insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams);
-    void mergeSortByDate(int year, int month, int day, int hour, int minutes);
-    void mergeSortByLocation(pair<float, float> inputCoordinates);
-    void quickSortByDate(int year, int month, int day, int hour, int minutes);
-    void quickSortByLocation(pair<float, float> inputCoordinates);
+    float mergeSortByDate(int year, int month, int day, int hour, int minutes);
+    float mergeSortByLocation(pair<float, float> inputCoordinates);
+    float quickSortByDate(int year, int month, int day, int hour, int minutes);
+    float quickSortByLocation(pair<float, float> inputCoordinates);
     vector<std::string> returnSightings();
 };
 
