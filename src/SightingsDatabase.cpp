@@ -1,5 +1,6 @@
 #include "SightingsDatabase.h"
-#include <ctime>
+#include <chrono>
+
 
 SightingsDatabase::Sighting::Date::Date()
 {
@@ -276,22 +277,30 @@ void SightingsDatabase::merge(int left, int mid, int right)
 }
 
 //Sorting Lecture was referenced
-void SightingsDatabase::quickSort(int low, int high)
+void SightingsDatabase::quickSort(int low, int high, std::chrono::_V2::system_clock::time_point start)
 {
     if (low < high)
     {
-        int pivot = partition(low, high);
-        quickSort(low, pivot - 1);
-        quickSort(pivot + 1, high);
+        //std::cout << "infinite" << endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration<float>(end - start).count() > 1) {return;}
+        int pivot = partition(low, high, start);
+        quickSort(low, pivot - 1, start);
+        quickSort(pivot + 1, high, start);
     }
 }
 
+void SightingsDatabase::swapSighting(Sighting* a, Sighting* b) {
+    Sighting t = *a;
+    *a = *b;
+    *b = t;
+}
+
 //Sorting Lecture was referenced
-int SightingsDatabase::partition(int low, int high)
+int SightingsDatabase::partition(int low, int high, std::chrono::_V2::system_clock::time_point start)
 {
     float pivot = sightings.at(low).getDifference();
     int up = low, down = high;
-
     while(up < down)
     {
         for (int j = up; j < high; j++)
@@ -312,10 +321,10 @@ int SightingsDatabase::partition(int low, int high)
         }
         if(up < down)
         {
-            swap(sightings.at(up), sightings.at(down));
+            swapSighting(&sightings.at(up), &sightings.at(down));
         }
     }
-    swap(sightings.at(low), sightings.at(down));
+    swapSighting(&sightings.at(low), &sightings.at(down));
     return down;
 }
 
@@ -387,42 +396,46 @@ void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, fl
 
 float SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
-    auto start = Clock::now();
     mergeSort(0, sightings.size() - 1);
-    auto end = Clock::now();
-    return end - start;
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
+float SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByLocation(inputCoordinates);
-    auto start = Clock::now();
     mergeSort(0, sightings.size() - 1);
-    auto end = Clock::now();
-    return end - start;
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-void SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
+float SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
-    auto start = Clock::now();
-    quickSort(0, sightings.size() - 1);
-    auto end = Clock::now();
-    return end - start;
+    quickSort(0, sightings.size() - 1, start);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
-void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
+float SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByLocation(inputCoordinates);
-    auto start = Clock::now();
-    quickSort(0, sightings.size() - 1);
-    auto end = Clock::now();
-    return end - start;
+    quickSort(0, sightings.size() - 1, start);
+    auto end = std::chrono::high_resolution_clock::now();
+    float diff = std::chrono::duration<float>(end - start).count();
+    return diff;
 }
 
 vector<std::string> SightingsDatabase::returnSightings() {
@@ -447,7 +460,7 @@ vector<std::string> SightingsDatabase::returnSightings() {
         info.pop_back();
         info.pop_back();
         vectorOfSightings.push_back(info);
-        count++;
+        count += 1;
     }
     return vectorOfSightings;
     

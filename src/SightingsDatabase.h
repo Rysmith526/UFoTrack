@@ -84,14 +84,16 @@ class SightingsDatabase
         std::pair<float, float> getCoordinates();
         string getSightDate();
         string getDocDate();
+        int count;
 	};
 
     void setDifference(float difference);
     float getDifference();
     void mergeSort(int left, int right);
     void merge(int left, int mid, int right);
-    void quickSort(int low, int high);
-    int partition(int low, int high);
+    void quickSort(int low, int high, std::chrono::_V2::system_clock::time_point start);
+    void swapSighting(Sighting* a, Sighting* b);
+    int partition(int low, int high, std::chrono::_V2::system_clock::time_point start);
 
 public:
     vector<Sighting> sightings;
