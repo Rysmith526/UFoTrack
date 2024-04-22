@@ -274,6 +274,50 @@ void SightingsDatabase::merge(int left, int mid, int right)
 
 }
 
+//Sorting Lecture was referenced
+void SightingsDatabase::quickSort(int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition(low, high);
+        quickSort(low, pivot - 1);
+        quickSort(pivot + 1, high);
+    }
+}
+
+//Sorting Lecture was referenced
+int SightingsDatabase::partition(int low, int high)
+{
+    int pivot = sightings.at(high / 2);
+    int up = low, down = high;
+
+    while(up < down)
+    {
+        for (int j = up; j < high; j++)
+        {
+            if(sightings.at(up) > pivot)
+            {
+                break;
+            }
+            up++;
+        }
+        for (int j = high; j > low; j--)
+        {
+            if(sightings.at(down) < pivot)
+            {
+                break;
+            }
+            down--;
+        }
+        if(up < down)
+        {
+            swap(&sightings[up], &sightings[down]);
+        }
+    }
+    swap(&sightings[low], &sightings[down]);
+    return down;
+}
+
 // https://www.geeksforgeeks.org/csv-file-management-using-c/ was referenced
 // May need to add input verification from file
 SightingsDatabase::SightingsDatabase() {
@@ -334,7 +378,6 @@ SightingsDatabase::SightingsDatabase(string filename)
     }
 }
 
-//Maybe add writing to csv file
 //Str Params: City, State, Country, Shape, Description; Int Params: Sighting Year, Month, Day, Hour, Minutes, Doc. Year, Month, Day
 void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, float> coordinates, vector<int>& intParams)
 {
@@ -355,18 +398,18 @@ void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
     mergeSort(0, sightings.size() - 1);
 }
 
-//Needs to be implemented
 void SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByDate(year, month, day, hour, minutes);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
+    quickSort(0, sightings.size() - 1);
 }
 
-//Needs to be implemented
 void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 {
-    for (Sighting sighting : sightings)
-        sighting.setDifferenceByLocation(inputCoordinates);
+    for (int i = 0; i < sightings.size(); i++)
+        sightings[i].setDifferenceByLocation(inputCoordinates);
+    quickSort(0, sightings.size() - 1);
 }
 
 vector<std::string> SightingsDatabase::returnSightings() {
@@ -393,4 +436,3 @@ vector<std::string> SightingsDatabase::returnSightings() {
     return vectorOfSightings;
     
 }
-
