@@ -1,4 +1,5 @@
 #include "SightingsDatabase.h"
+#include <ctime>
 
 SightingsDatabase::Sighting::Date::Date()
 {
@@ -384,37 +385,51 @@ void SightingsDatabase::insertSighting(vector<string>& strParams, pair<float, fl
     sightings.push_back(Sighting(strParams, coordinates, intParams));
 }
 
-void SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
+float SightingsDatabase::mergeSortByDate(int year, int month, int day, int hour, int minutes)
 {
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
+    auto start = Clock::now();
     mergeSort(0, sightings.size() - 1);
+    auto end = Clock::now();
+    return end - start;
 }
 
 void SightingsDatabase::mergeSortByLocation(pair<float, float> inputCoordinates)
 {
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByLocation(inputCoordinates);
+    auto start = Clock::now();
     mergeSort(0, sightings.size() - 1);
+    auto end = Clock::now();
+    return end - start;
 }
 
 void SightingsDatabase::quickSortByDate(int year, int month, int day, int hour, int minutes)
 {
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByDate(year, month, day, hour, minutes);
+    auto start = Clock::now();
     quickSort(0, sightings.size() - 1);
+    auto end = Clock::now();
+    return end - start;
 }
 
 void SightingsDatabase::quickSortByLocation(pair<float, float> inputCoordinates)
 {
     for (int i = 0; i < sightings.size(); i++)
         sightings[i].setDifferenceByLocation(inputCoordinates);
+    auto start = Clock::now();
     quickSort(0, sightings.size() - 1);
+    auto end = Clock::now();
+    return end - start;
 }
 
 vector<std::string> SightingsDatabase::returnSightings() {
+    int count = 0;
     vector<std::string> vectorOfSightings;
     for (Sighting sighting : sightings) {
+        if (count == 500) {break;}
         std::string info;
 
         info += "City: " + sighting.getLocationCity() + ", ";
@@ -432,6 +447,7 @@ vector<std::string> SightingsDatabase::returnSightings() {
         info.pop_back();
         info.pop_back();
         vectorOfSightings.push_back(info);
+        count++;
     }
     return vectorOfSightings;
     
