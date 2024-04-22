@@ -9,4 +9,6 @@ https://www.youtube.com/watch?v=ONYW3hBbk-8&list=PLFk1_lkqT8MbVOcwEppCPfjGOGhLvc
 <br> <br>
 Please make sure you have downloaded the entire src file and added files to their respective places.
 
+ <img src="/resources/readmescreenshot.png"> <br>
 
+ When all 16 files press the green run arrow at the top to run the program.
